@@ -22,6 +22,19 @@ from .features import FEATURES, AMOUNT_FEATURES, CATEGORICAL, NUMERIC, clean_fra
 ROOT = Path(__file__).resolve().parents[2]
 
 
+def split_periods(frame: pd.DataFrame, settings: dict):
+    selection_start = pd.Timestamp(settings['selection_start'])
+    calibration_start = pd.Timestamp(settings['calibration_start'])
+    internal_start = pd.Timestamp(settings['internal_check_start'])
+    future_start = pd.Timestamp(settings['future_test_start'])
+    if not selection_start < calibration_start < internal_start < future_start:
+        raise ValueError('Chronological split boundaries must increase')
+    return (frame[frame.issue_d < selection_start],
+            frame[(frame.issue_d >= selection_start) & (frame.issue_d < calibration_start)],
+            frame[(frame.issue_d >= calibration_start) & (frame.issue_d < internal_start)],
+            frame[(frame.issue_d >= internal_start) & (frame.issue_d < future_start)])
+
+
 def logistic_baseline(fit: pd.DataFrame):
     prep = ColumnTransformer([
         ('num', Pipeline([('impute', SimpleImputer(strategy='median')),
@@ -67,10 +80,7 @@ def train(raw: Path, output: Path, future_raw: Path | None = None):
     x['issue_d'] = pd.to_datetime(data.issue_d, errors='coerce')
     x = x.dropna(subset=['issue_d', 'loan_status', 'loan_amnt'])
     x = x[x.loan_status.isin([0, 1]) & x.loan_amnt.between(1000, 40000)]
-    fit = x[x.issue_d < '2016-01-01']
-    selection = x[(x.issue_d >= '2016-01-01') & (x.issue_d < '2016-03-01')]
-    calibration = x[(x.issue_d >= '2016-03-01') & (x.issue_d < '2016-04-01')]
-    test = x[x.issue_d >= '2016-04-01']
+    fit, selection, calibration, test = split_periods(x, cfg['model'])
     if min(map(len, [fit, selection, calibration, test])) < 100:
         raise ValueError('Every chronological partition needs at least 100 rows')
 

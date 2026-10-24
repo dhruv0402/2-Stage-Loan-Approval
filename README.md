@@ -2,6 +2,10 @@
 
 A resume-ready React + FastAPI project with a documented machine-learning lifecycle. Stage 1 estimates a favorable loan outcome in a historical funded-loan cohort. Stage 2 estimates the typical historical amount for a similar funded loan, then applies a transparent affordability cap. **It is a research simulation, not an actual lender approval or optimal loan offer.**
 
+![Interface concept for the React workbench](docs/interface-concept.png)
+
+*Design concept; the live interface is implemented in `frontend/`.*
+
 ## Measured results
 
 | Evaluation | Result |
