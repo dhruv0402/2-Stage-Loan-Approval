@@ -1,4 +1,4 @@
-# Product requirements — Underwrite v0.2
+# Product requirements — Credence AI v0.2
 
 ## Intent
 

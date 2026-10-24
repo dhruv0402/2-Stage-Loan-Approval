@@ -6,7 +6,7 @@ import uuid
 from datetime import datetime, timezone
 
 ROOT = Path(__file__).resolve().parents[2]
-DB_PATH = ROOT / 'data/underwrite.db'
+DB_PATH = ROOT / 'data/credence.db'
 DATABASE_URL = os.getenv('DATABASE_URL', '')
 
 IS_POSTGRES = bool(DATABASE_URL and (DATABASE_URL.startswith('postgres://') or DATABASE_URL.startswith('postgresql://')))

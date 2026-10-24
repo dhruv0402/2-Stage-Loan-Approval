@@ -1,4 +1,4 @@
-# Technical requirements — Underwrite v0.2
+# Technical requirements — Credence AI v0.2
 
 ## Stack
 

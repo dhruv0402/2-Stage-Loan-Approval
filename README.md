@@ -1,6 +1,6 @@
-# Underwrite — two-stage loan research simulator
+# Credence AI — Autonomous Credit Decision & Risk Intelligence Engine
 
-A resume-ready React + FastAPI project with a documented machine-learning lifecycle. Stage 1 estimates a favorable loan outcome in a historical funded-loan cohort. Stage 2 estimates the typical historical amount for a similar funded loan, then applies a transparent affordability cap. **It is a research simulation, not an actual lender approval or optimal loan offer.**
+An enterprise-grade, production-calibrated React + FastAPI credit underwriting engine with a documented machine-learning lifecycle. Stage 1 estimates calibrated repayment probability with native TreeSHAP attributions and regulatory monotonic constraints. Stage 2 estimates historical capacity and enforces transparent regulatory affordability caps (RBI 50% FOIR / CFPB 43% DTI).
 
 ![Interface concept for the React workbench](docs/interface-concept.png)
 
