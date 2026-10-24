@@ -1,0 +1,1 @@
+Run `python scripts/download_data.py` from the project root to obtain the two checksum-verified Figshare CSV snapshots. Raw rows are excluded from Git; the model artifact and metrics are committed for an immediate API demo.

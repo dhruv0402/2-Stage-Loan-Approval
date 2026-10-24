@@ -1,0 +1,14 @@
+model:
+  seed: 42
+  decision_threshold: 0.70
+  review_margin: 0.05
+  dataset_sha256: 8efebed1a9cbaba1edb511f9026732244c2a97497c73a8eb42d1f7864c77d8c1
+  selection_start: '2016-01-01'
+  calibration_start: '2016-03-01'
+  internal_check_start: '2016-04-01'
+  future_test_start: '2016-07-01'
+policy:
+  assumed_apr: 0.12
+  max_payment_share_of_monthly_income: 0.12
+  max_offer: 40000
+  min_offer: 1000
