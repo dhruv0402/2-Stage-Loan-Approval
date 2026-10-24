@@ -86,10 +86,14 @@ def train(raw: Path, output: Path, future_raw: Path | None = None):
 
     baseline = logistic_baseline(fit)
     baseline_auc = float(roc_auc_score(selection.loan_status, baseline.predict_proba(selection[FEATURES])[:, 1]))
-    candidates = []
+    # Enforce regulatory monotone constraints:
+    # higher annual_inc (+1), dti (-1), fico (+1), emp_length (+1), loan_amnt (-1), revol_util (-1), open_acc (0), pub_rec_bankruptcies (-1), revol_bal (-1), purpose (0), term (0), home (0)
+    monotone_constraints = [1, -1, 1, 1, -1, -1, 0, -1, -1, 0, 0, 0]
+
     for leaves in [7, 15, 31]:
         model = LGBMClassifier(n_estimators=500, num_leaves=leaves, learning_rate=.03,
                                min_child_samples=300, colsample_bytree=.9, reg_lambda=20,
+                               monotone_constraints=monotone_constraints,
                                verbosity=-1, random_state=cfg['model']['seed'], n_jobs=4)
         model.fit(fit[FEATURES], fit.loan_status, eval_X=selection[FEATURES], eval_y=selection.loan_status,
                   eval_metric='auc', callbacks=[early_stopping(25, verbose=False), log_evaluation(0)])
