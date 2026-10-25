@@ -49,6 +49,69 @@ export const initialUSD: Input = {
   home_ownership: 'MORTGAGE'
 };
 
+export const DEMO_PROFILES: Record<string, { label: string; tag: string; tagColor: string; data: Input }> = {
+  prime: {
+    label: 'Profile A: Prime Salaried',
+    tag: 'CLEAN APPROVAL',
+    tagColor: '#059669',
+    data: {
+      currency: 'INR',
+      requested_amount: 400000,
+      annual_income: 1400000,
+      dti: 16,
+      cibil: 795,
+      employment_years: 5,
+      term_months: 36,
+      purpose: 'debt_consolidation',
+      revolving_utilization: 22,
+      open_accounts: 6,
+      public_bankruptcies: 0,
+      revolving_balance: 24000,
+      home_ownership: 'OWN'
+    }
+  },
+  borderline: {
+    label: 'Profile B: Over-leveraged',
+    tag: 'BORDERLINE / RECOURSE',
+    tagColor: '#d97706',
+    data: {
+      currency: 'INR',
+      requested_amount: 600000,
+      annual_income: 900000,
+      dti: 52,
+      cibil: 685,
+      employment_years: 3,
+      term_months: 36,
+      purpose: 'credit_card',
+      revolving_utilization: 68,
+      open_accounts: 9,
+      public_bankruptcies: 0,
+      revolving_balance: 95000,
+      home_ownership: 'RENT'
+    }
+  },
+  highrisk: {
+    label: 'Profile C: High Risk',
+    tag: 'CLEAR REJECTION',
+    tagColor: '#dc2626',
+    data: {
+      currency: 'INR',
+      requested_amount: 750000,
+      annual_income: 500000,
+      dti: 65,
+      cibil: 560,
+      employment_years: 1,
+      term_months: 60,
+      purpose: 'small_business',
+      revolving_utilization: 89,
+      open_accounts: 14,
+      public_bankruptcies: 1,
+      revolving_balance: 180000,
+      home_ownership: 'RENT'
+    }
+  }
+};
+
 export const initial: Input = initialINR;
 
 export function ApplicationForm({
@@ -72,8 +135,62 @@ export function ApplicationForm({
     onChange(curr === 'INR' ? initialINR : initialUSD);
   };
 
+  const loadPreset = (profileKey: string) => {
+    const preset = DEMO_PROFILES[profileKey];
+    if (preset) {
+      onChange(preset.data);
+    }
+  };
+
   return (
     <section className="panel form-panel">
+      {/* 1-Click College Demo Presets Bar */}
+      <div style={{
+        background: '#f8fafc',
+        border: '1px solid #e2e8f0',
+        borderRadius: '8px',
+        padding: '12px 14px',
+        marginBottom: '16px'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+          <span style={{ fontSize: '11px', fontWeight: 700, color: '#475569', letterSpacing: '0.04em' }}>
+            ⚡ 1-CLICK LIVE DEMO PRESETS (COLLEGE PRESENTATION)
+          </span>
+          <span style={{ fontSize: '11px', color: '#94a3b8' }}>Load instant test scenarios</span>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+          {Object.entries(DEMO_PROFILES).map(([key, p]) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => loadPreset(key)}
+              style={{
+                background: '#ffffff',
+                border: '1px solid #cbd5e1',
+                borderRadius: '6px',
+                padding: '8px 10px',
+                textAlign: 'left',
+                cursor: 'pointer',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '2px',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '12px', fontWeight: 700, color: '#0f172a' }}>{p.label}</span>
+                <span style={{ fontSize: '9px', fontWeight: 800, padding: '1px 5px', borderRadius: '3px', background: `${p.tagColor}15`, color: p.tagColor }}>
+                  {p.tag}
+                </span>
+              </div>
+              <span style={{ fontSize: '11px', color: '#64748b' }}>
+                CIBIL {p.data.cibil} • DTI {p.data.dti}% • {p.data.employment_years}y Exp
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="panel-heading">
         <div>
           <h2>Application details</h2>

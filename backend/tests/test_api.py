@@ -1,6 +1,8 @@
 from fastapi.testclient import TestClient
 from backend.app.main import app, payment
+from backend.app.db import init_db
 
+init_db()
 client = TestClient(app)
 BASE = {'requested_amount': 12000, 'annual_income': 85000, 'dti': 18, 'fico': 720,
         'employment_years': 5, 'term_months': 36, 'purpose': 'debt_consolidation', 'revolving_utilization': 53, 'open_accounts': 11,

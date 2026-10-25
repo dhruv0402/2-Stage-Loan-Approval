@@ -81,6 +81,16 @@ export function Result({ data, error }: { data: Assessment | null; error: string
               : 'Institutional underwriting term sheet under US Consumer Credit Standards.'}
           </p>
         </div>
+        {data && data.offer_amount && (
+          <button
+            type="button"
+            className="secondary"
+            onClick={() => window.print()}
+            style={{ fontSize: '12px', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '4px' }}
+          >
+            🖨️ Print Sanction Letter
+          </button>
+        )}
       </div>
 
       {error ? (
