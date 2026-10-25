@@ -72,31 +72,31 @@ export default function App() {
         <nav aria-label="Main navigation">
           <button className={view === 'dashboard' ? 'selected' : ''} onClick={() => navigate('dashboard')}>
             <LayoutDashboard size={18} />
-            Executive Dashboard
+            Overview & Metrics
           </button>
           <button className={view === 'assessment' ? 'selected' : ''} onClick={() => navigate('assessment')}>
             <FileText size={18} />
-            Underwriting Workbench
+            Loan Decision Center
           </button>
           <button className={view === 'stresstest' ? 'selected' : ''} onClick={() => navigate('stresstest')}>
             <Sliders size={18} />
-            Portfolio Stress Testing
+            Market Simulator
           </button>
           <button className={view === 'audit' ? 'selected' : ''} onClick={() => navigate('audit')}>
             <ShieldCheck size={18} />
-            Explainability & Audit
+            Fairness & Insights
           </button>
           <button className={view === 'model' ? 'selected' : ''} onClick={() => navigate('model')}>
             <BarChart3 size={18} />
-            Model Card & Diagnostics
+            Model Accuracy & Proof
           </button>
         </nav>
         <div className="sidebar-bottom">
           <button onClick={() => navigate('model')}>
             <HelpCircle size={16} />
-            System Architecture
+            System Performance
           </button>
-          <small>Enterprise Credit Intelligence · v2.0</small>
+          <small>Credence AI · Smart Credit Platform</small>
         </div>
       </aside>
 
@@ -105,18 +105,17 @@ export default function App() {
           <button className="mobile-menu" aria-label="Toggle navigation" onClick={() => setOpen(!open)}>
             <Menu />
           </button>
-          <span>AI Credit Underwriting & Risk Engine (RBI / Basel III Compliant)</span>
-          <div className="avatar">U</div>
+          <span>Credence AI — Intelligent Credit Decision Platform</span>
+          <div className="avatar">C</div>
         </header>
 
         <main>
           {view === 'assessment' ? (
             <>
               <div className="page-heading">
-                <h1>Loan Decision Workbench</h1>
+                <h1>Instant Loan Decision Center</h1>
                 <p>
-                  Institutional two-stage underwriting simulator with calibrated PD, TreeSHAP explainability, and RBI
-                  Key Fact Statement (KFS).
+                  Check loan approval eligibility, view sanctioned amounts, and see transparent interest rates in real time.
                 </p>
               </div>
               <div className="work-grid">

@@ -115,14 +115,17 @@ export function Result({ data, error }: { data: Assessment | null; error: string
             <div>
               <strong>
                 {data.status === 'eligible_for_simulated_offer'
-                  ? 'Sanctioned for Loan Offer'
+                  ? 'Congratulations! Your Loan is Approved'
                   : data.status === 'review'
-                  ? 'Manual Credit Committee Review'
-                  : 'Declined — Outside Risk Appetite'}
+                  ? 'Application Under Review'
+                  : 'Application Declined'}
               </strong>
               <span>
-                Repayment Probability: {(data.repayment_probability * 100).toFixed(1)}% · Probability of Default (PD):{' '}
-                {((data.probability_of_default ?? (1 - data.repayment_probability)) * 100).toFixed(1)}%
+                {data.status === 'eligible_for_simulated_offer'
+                  ? `High credit confidence · ${(data.repayment_probability * 100).toFixed(0)}% Approval Score`
+                  : data.status === 'review'
+                  ? 'Needs additional document verification (Salary slips or bank statement)'
+                  : 'Current debt burden or credit score is outside permissible guidelines'}
               </span>
             </div>
           </div>
@@ -130,38 +133,36 @@ export function Result({ data, error }: { data: Assessment | null; error: string
           {/* Sanctioned Offer Overview */}
           <div className="offer">
             <div>
-              <small>Sanctioned Loan Facility</small>
-              <strong>{data.offer_amount ? formatMoney(data.offer_amount, curr) : 'No Offer'}</strong>
+              <small>Approved Loan Amount</small>
+              <strong>{data.offer_amount ? formatMoney(data.offer_amount, curr) : 'Not Approved'}</strong>
               <span>
                 {data.offer_amount
-                  ? `Optimized within ${isINR ? 'RBI 50% FOIR limit' : 'CFPB 36% DTI limit'} and credit capacity.`
-                  : 'Debt burden exceeds permissible debt-service coverage ratios.'}
+                  ? `Calculated based on your income and monthly repayment capacity.`
+                  : 'High existing monthly loan payments prevent granting an additional loan.'}
               </span>
             </div>
             <div className="offer-details">
               <div>
-                <span>Risk-Adjusted APR</span>
+                <span>Interest Rate (Annual)</span>
                 <b>
                   {data.risk_adjusted_apr
-                    ? `${(data.risk_adjusted_apr * 100).toFixed(2)}%`
+                    ? `${(data.risk_adjusted_apr * 100).toFixed(1)}%`
                     : `${(data.assumed_apr * 100).toFixed(1)}%`}
                 </b>
               </div>
               <div>
-                <span>Max Affordability Cap</span>
+                <span>Max Safe Borrowing Limit</span>
                 <b>{formatMoney(data.affordability_cap, curr)}</b>
               </div>
               <div>
-                <span>Monthly Installment (EMI)</span>
-                <b>{data.illustrative_monthly_payment ? formatMoney(data.illustrative_monthly_payment, curr) : '—'}</b>
+                <span>Monthly EMI</span>
+                <b style={{ color: '#047857' }}>
+                  {data.illustrative_monthly_payment ? formatMoney(data.illustrative_monthly_payment, curr) : '—'}
+                </b>
               </div>
               <div>
-                <span>Expected Credit Loss (EL)</span>
-                <b>
-                  {data.expected_loss !== undefined && data.expected_loss !== null
-                    ? formatMoney(data.expected_loss, curr)
-                    : '—'}
-                </b>
+                <span>Loan Tenure</span>
+                <b>36 Months (3 Yrs)</b>
               </div>
             </div>
           </div>
@@ -199,11 +200,11 @@ export function Result({ data, error }: { data: Assessment | null; error: string
             </div>
           )}
 
-          {/* Actionable Counterfactual Recourse */}
+          {/* Actionable Tips to Improve / Borrow More */}
           {data.counterfactual_recourse && data.counterfactual_recourse.length > 0 && (
             <div className="factor-section">
-              <h3>Actionable Borrower Recourse (Prescriptive Plan)</h3>
-              <p>Optimization-backed steps to expand borrowing capacity and reduce interest spread.</p>
+              <h3>Tips to Improve Your Eligibility</h3>
+              <p>Simple actions you can take to qualify for a larger loan or reduce your interest rate.</p>
               {data.counterfactual_recourse.map((r, idx) => (
                 <div
                   className="factor"
@@ -222,22 +223,22 @@ export function Result({ data, error }: { data: Assessment | null; error: string
             </div>
           )}
 
-          {/* TreeSHAP Feature Attributions */}
+          {/* Key Positive and Negative Factors */}
           {((data.adverse_action_factors && data.adverse_action_factors.length > 0) ||
             (data.key_strengths && data.key_strengths.length > 0)) && (
             <div className="factor-section">
-              <h3>TreeSHAP Feature Attributions</h3>
-              <p>Exact contribution to log-odds score (Regulatory Adverse Action & Credit Strengths).</p>
+              <h3>Key Factors Influencing Your Decision</h3>
+              <p>What helped and what hurt your loan eligibility score.</p>
 
               {data.key_strengths && data.key_strengths.length > 0 && (
                 <div style={{ marginBottom: '12px' }}>
                   <small style={{ fontWeight: 600, color: '#16a34a', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                    Top Credit Strengths
+                    Positive Factors (Helped Your Score)
                   </small>
                   {data.key_strengths.map(s => (
                     <div className="factor" key={`pos-${s.feature}`}>
                       <span>{s.label}</span>
-                      <b className="up">+{s.shap_value.toFixed(3)}</b>
+                      <b className="up" style={{ color: '#16a34a' }}>Positive Impact</b>
                     </div>
                   ))}
                 </div>
@@ -246,12 +247,12 @@ export function Result({ data, error }: { data: Assessment | null; error: string
               {data.adverse_action_factors && data.adverse_action_factors.length > 0 && (
                 <div>
                   <small style={{ fontWeight: 600, color: '#dc2626', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                    Adverse Action Factors (Risk Drags)
+                    Areas of Improvement (Lowered Your Score)
                   </small>
                   {data.adverse_action_factors.map(s => (
                     <div className="factor" key={`neg-${s.feature}`}>
                       <span>{s.label}</span>
-                      <b className="down">{s.shap_value.toFixed(3)}</b>
+                      <b className="down" style={{ color: '#dc2626' }}>Negative Drag</b>
                     </div>
                   ))}
                 </div>

@@ -193,11 +193,11 @@ export function ApplicationForm({
 
       <div className="panel-heading">
         <div>
-          <h2>Application details</h2>
+          <h2>Borrower Information</h2>
           <p>
             {isINR
-              ? 'Institutional underwriting simulator under RBI Digital Lending Guidelines & CIBIL.'
-              : 'Institutional underwriting simulator under US CFPB ATR Rules & FICO.'}
+              ? 'Enter applicant details to instantly calculate eligible loan amount, monthly EMI, and approval probability.'
+              : 'Enter applicant details to evaluate loan eligibility and monthly payment schedule.'}
           </p>
         </div>
         <div style={{ display: 'flex', gap: '6px' }}>
@@ -207,7 +207,7 @@ export function ApplicationForm({
             style={{ padding: '4px 10px', fontSize: '12px' }}
             onClick={() => handleCurrencyToggle('INR')}
           >
-            ₹ INR (India / CIBIL)
+            ₹ INR (India)
           </button>
           <button
             type="button"
@@ -215,7 +215,7 @@ export function ApplicationForm({
             style={{ padding: '4px 10px', fontSize: '12px' }}
             onClick={() => handleCurrencyToggle('USD')}
           >
-            $ USD (Global / FICO)
+            $ USD (Global)
           </button>
         </div>
       </div>
@@ -223,7 +223,7 @@ export function ApplicationForm({
       <form onSubmit={onSubmit}>
         <div className="form-grid">
           <label>
-            Requested amount ({sym})
+            Desired Loan Amount ({sym})
             <input
               type="number"
               required
@@ -249,7 +249,7 @@ export function ApplicationForm({
           </label>
 
           <label>
-            {isINR ? 'Existing EMIs / Obligations (FOIR %)' : 'Existing Debt-to-Income (DTI %)'}
+            Existing Monthly EMI Burden (% of salary)
             <input
               type="number"
               required
@@ -338,15 +338,13 @@ export function ApplicationForm({
         </div>
 
         <div className="credit-profile">
-          <h3>Bureau Tradelines & Stability</h3>
+          <h3>Credit & Repayment History</h3>
           <p>
-            {isINR
-              ? 'Key credit bureau and banking tradelines verified through Account Aggregator (AA) and CIBIL report.'
-              : 'Credit profile features calibrated against historical loan underwriting cohorts.'}
+            Past loan repayments, credit card usage, and active accounts.
           </p>
           <div className="form-grid">
             <label>
-              Credit line utilization (%)
+              Credit Card Usage (% of credit limit)
               <input
                 type="number"
                 required
@@ -359,7 +357,7 @@ export function ApplicationForm({
             </label>
 
             <label>
-              Active credit lines
+              Total Active Loans & Cards
               <input
                 type="number"
                 required
@@ -371,7 +369,7 @@ export function ApplicationForm({
             </label>
 
             <label>
-              {isINR ? 'Default suits / Write-offs' : 'Public bankruptcies'}
+              Past Loan Defaults / Cheque Bounces
               <input
                 type="number"
                 required
@@ -383,7 +381,7 @@ export function ApplicationForm({
             </label>
 
             <label>
-              Outstanding credit balance ({sym})
+              Current Credit Card Balance ({sym})
               <input
                 type="number"
                 required
@@ -396,14 +394,14 @@ export function ApplicationForm({
             </label>
 
             <label className="wide">
-              Residential status
+              Home Ownership
               <select
                 value={value.home_ownership}
                 onChange={e => onChange({ ...value, home_ownership: e.target.value })}
               >
-                <option value="OWN">Self-Owned Property</option>
-                <option value="MORTGAGE">Home Loan / Mortgaged</option>
-                <option value="RENT">Rented Accommodation</option>
+                <option value="OWN">Own House</option>
+                <option value="MORTGAGE">Home Loan / Paying EMI</option>
+                <option value="RENT">Rented House</option>
               </select>
             </label>
           </div>
@@ -411,10 +409,10 @@ export function ApplicationForm({
 
         <div className="form-actions">
           <button className="primary" type="submit" disabled={busy}>
-            {busy ? 'Evaluating Credit Profile…' : 'Run Underwriting Engine'}
+            {busy ? 'Analyzing Eligibility…' : 'Check Loan Eligibility'}
           </button>
           <button className="secondary" type="button" onClick={onClear}>
-            Reset Defaults
+            Reset Form
           </button>
         </div>
       </form>
